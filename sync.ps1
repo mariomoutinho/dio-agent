@@ -22,7 +22,8 @@ param(
     [string]$Message,
 
     [switch]$PullUpstream,
-    [switch]$StatusOnly
+    [switch]$StatusOnly,
+    [switch]$Anki
 )
 
 $ErrorActionPreference = "Stop"
@@ -113,3 +114,15 @@ try {
     Write-Err "Falha ao enviar para o GitHub: $($_.Exception.Message)"
     exit 1
 }
+
+# 8. Sincronizar com o Anki (se solicitado via -Anki ou se script específico for invocado)
+if ($Anki) {
+    Write-Host ""
+    Write-Info "Disparando atualização direta no Anki Desktop..."
+    if (Test-Path "$PSScriptRoot\anki\anki-push.ps1") {
+        & "$PSScriptRoot\anki\anki-push.ps1"
+    } else {
+        Write-Warn "Script anki-push.ps1 não encontrado na pasta anki/."
+    }
+}
+

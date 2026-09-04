@@ -13,24 +13,52 @@ Em vez de perguntas rasas ou conceituais soltas, cada tema abordado no projeto �
 
 ---
 
-## 🚀 Como Importar no Anki SEM Resetar Agendamentos
+## ⚡ Método 1: Atualização Direta pela IDE (Recomendado - 1 Clique)
 
-O arquivo mestre [`anki/dio_agent_deck.txt`](dio_agent_deck.txt) é **cumulativo**. Você pode importá-lo todos os dias sem medo de perder suas revisões antigas, seguindo os passos abaixo:
+Você pode enviar os novos cartões para o Anki **diretamente da IDE ou do terminal**, sem precisar abrir telas de importação nem selecionar arquivos!
 
-### Passo a Passo no Anki Desktop:
+### Como habilitar uma única vez no seu Anki:
+
+1. Abra o aplicativo **Anki** no computador;
+2. No menu superior, vá em: **Ferramentas** (`Tools`) -> **Complementos** (`Add-ons`) -> **Obter complementos...** (`Get Add-ons...`);
+3. Cole o código do complemento oficial **AnkiConnect**:
+   ```
+   2055492159
+   ```
+4. Clique em **OK** e reinicie o Anki.
+
+### Como usar no dia a dia pela IDE:
+
+Com o Anki aberto (pode ficar minimizado em segundo plano), abra o terminal na IDE e rode:
+
+```powershell
+# Opção A: Sincronizar apenas o Anki direto
+.\anki\anki-push.ps1
+
+# Opção B: Sincronizar com o GitHub E com o Anki ao mesmo tempo!
+.\sync.ps1 -Anki
+```
+
+O script faz tudo sozinho:
+- Cria o baralho `DIO Agent::Projetos Praticos` automaticamente (se ainda não existir);
+- Verifica quais notas já existem para **NÃO duplicar e NÃO resetar nenhum agendamento**;
+- Injeta instantaneamente os novos cartões;
+- Dispara a sincronização com o **AnkiWeb** (para os novos cartões irem direto para o seu celular/tablet).
+
+---
+
+## 📁 Método 2: Importação Manual pelo Aplicativo (Arquivo .txt)
+
+Se você preferir não usar o complemento, pode importar o arquivo cumulativo [`anki/dio_agent_deck.txt`](dio_agent_deck.txt) manualmente a qualquer momento:
 
 1. Abra o Anki;
 2. Vá em **Arquivo** (`File`) -> **Importar** (`Import...`) ou aperte `Ctrl + I`;
 3. Selecione o arquivo `dio-agent/anki/dio_agent_deck.txt`;
-4. Na janela de importação que se abre, configure com atenção:
+4. Na janela de importação que se abre:
    - **Tipo de Nota (Type):** `Básico` (ou `Basic`);
-   - **Baralho (Deck):** Selecione ou deixe criar automaticamente `DIO Agent::Projetos Praticos`;
-   - **Separador de Campo:** `Tab` (reconhecido automaticamente pela diretiva `#separator:tab`);
-   - **Permitir HTML nos campos:** Marque como ativado (ou já virá ativo por `#html:true`);
-   - ⚠️ **Notas Existentes (Existing Notes / Duplicate Action):** Selecione **"Ignorar linhas onde o primeiro campo coincida com nota existente"** (*Ignore lines where first field matches existing note*).
+   - **Baralho (Deck):** `DIO Agent::Projetos Praticos`;
+   - ⚠️ **Notas Existentes (Existing Notes):** Selecione **"Ignorar linhas onde o primeiro campo coincida com nota existente"** (*Ignore lines where first field matches existing note*).
 
-> [!IMPORTANT]
-> **Essa é a garantia do seu agendamento:** Ao selecionar "Ignorar linhas onde o primeiro campo coincida com nota existente", o Anki compara a Frente de cada cartão. Se você já tem aquele cartão no baralho, ele **não altera nada** (mantém seus intervalos, facilidade e data de revisão intactos!). Ele adicionará **apenas os cartões novos criados no dia**.
 
 ---
 
