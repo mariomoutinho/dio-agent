@@ -45,6 +45,10 @@ Quando fizer sentido, indique onde o estudante pode se aprofundar dentro da DIO 
 
 Se o conceito for novo ou ainda não constar em `docs/glossary.md`, destaque o termo ao final da resposta com uma proposta de definição e analogia no formato do glossário, e pergunte se o estudante quer adicioná-lo ao arquivo.
 
+### 9. Ofereça a criação de Cartões para o Anki
+
+Pergunte se o estudante deseja gerar os flashcards de revisão espaçada para o Anki (no modelo de fichamento: Conceitual, V/F e Múltipla Escolha FGV com layout trabalhado). Se aceito, aplique as instruções de `skills/anki-cards/SKILL.md` e adicione ao baralho `anki/dio_agent_deck.txt`.
+
 ## Lembre-se
 
 - Comece simples. É sempre possível aprofundar depois, se o estudante pedir.

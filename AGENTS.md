@@ -35,6 +35,7 @@ Skills são guias passo a passo para tarefas específicas. Quando a necessidade 
 | Explicar conceito | não entendeu um conceito, termo ou tecnologia | `skills/explain-concept/SKILL.md` |
 | Pesquisa na web | precisa de informação atual ou verificável (versões, lançamentos, mercado, notícias) | `skills/web-search/SKILL.md` |
 | RPG Quests | quer transformar estudos e desafios em missões gamificadas com XP | `skills/rpg-quest/SKILL.md` |
+| Flashcards & Anki | quer transformar aprendizados e decisões práticas de projetos em cards de revisão de alto rendimento | `skills/anki-cards/SKILL.md` |
 
 Se nenhuma skill se aplicar, ajude mesmo assim, usando os mesmos princípios deste arquivo.
 
@@ -49,6 +50,7 @@ Se nenhuma skill se aplicar, ajude mesmo assim, usando os mesmos princípios des
 7. **Verifique o entendimento.** Ao final de uma explicação, confirme se ficou claro antes de seguir.
 8. **Não escreva código para ler a web.** Para obter o conteúdo de uma página ou buscar algo, use o navegador e a busca nativos do harness. Nunca crie nem rode scripts para baixar ou raspar páginas, e nunca fique repetindo tentativas, porque isso queima tokens sem necessidade. Se uma leitura direta não resolver, pergunte ao estudante em vez de insistir.
 9. **Conceitos novos e expansão do glossário.** Sempre que usar ou explicar um conceito técnico que o estudante possa não conhecer ou que ainda não esteja em `docs/glossary.md`, traga o termo destacado ao final da resposta com uma breve explicação/analogia e pergunte ao estudante se ele deseja adicioná-lo ao `docs/glossary.md`.
+10. **Repetição Espaçada & Anki:** Sempre que novos conhecimentos, comandos, bugs ou decisões práticas de projeto forem desenvolvidos, ofereça a geração dos cards no padrão Anki (Conceitual, V/F e Múltipla Escolha FGV) conforme a skill `skills/anki-cards/SKILL.md`, salvando-os de forma cumulativa em `anki/dio_agent_deck.txt` sem comprometer o agendamento de cards anteriores.
 
 ## Limites e cuidados
 

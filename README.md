@@ -107,13 +107,16 @@ Não precisa de comando especial nem de formato perfeito: o agente conduz a conv
 
 ## 🧩 As skills do agente
 
-Uma **skill** é uma habilidade do agente, descrita em um guia passo a passo. O DIO Agent vem com três:
+Uma **skill** é uma habilidade do agente, descrita em um guia passo a passo. O DIO Agent conta com as seguintes skills:
 
 | Skill | Para que serve |
 |-------|----------------|
 | [Plano de estudos](skills/study-plan/SKILL.md) | Organiza o que estudar, em que ordem e em quanto tempo |
 | [Destravar desafio](skills/unblock-challenge/SKILL.md) | Conduz você até a solução de um desafio, sem dar a resposta pronta |
 | [Explicar conceito](skills/explain-concept/SKILL.md) | Explica conceitos de forma didática, com analogias e exemplos |
+| [Flashcards & Anki](skills/anki-cards/SKILL.md) | Transforma aprendizados e decisões práticas em cartões de revisão no Anki (Conceituais, V/F e FGV) |
+| [RPG Quests](skills/rpg-quest/SKILL.md) | Transforma seus estudos e desafios em missões gamificadas com recompensas e XP |
+| [Pesquisa na Web](skills/web-search/SKILL.md) | Busca informações atualizadas e verificáveis sobre tecnologia e mercado |
 
 Você não precisa "chamar" uma skill. O agente percebe o que você precisa e usa a skill certa sozinho.
 
