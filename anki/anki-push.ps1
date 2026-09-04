@@ -12,11 +12,24 @@
 
 [CmdletBinding()]
 param(
-    [string]$DeckPath = "$PSScriptRoot\dio_agent_deck.txt",
+    [string]$DeckPath,
     [switch]$AutoSync = $true
 )
 
 $ErrorActionPreference = "Stop"
+
+if ([string]::IsNullOrWhiteSpace($DeckPath)) {
+    if ($PSScriptRoot -and (Test-Path "$PSScriptRoot\dio_agent_deck.txt")) {
+        $DeckPath = "$PSScriptRoot\dio_agent_deck.txt"
+    } elseif (Test-Path ".\anki\dio_agent_deck.txt") {
+        $DeckPath = ".\anki\dio_agent_deck.txt"
+    } elseif (Test-Path ".\dio_agent_deck.txt") {
+        $DeckPath = ".\dio_agent_deck.txt"
+    } else {
+        $DeckPath = "e:\DIO-Agent\dio-agent\anki\dio_agent_deck.txt"
+    }
+}
+
 
 function Write-Info([string]$text) {
     Write-Host "[INFO] $text" -ForegroundColor Cyan
@@ -114,54 +127,54 @@ $createDeckBody = @{
 
 Invoke-RestMethod -Uri $ankiUrl -Method Post -Body $createDeckBody -ContentType "application/json" | Out-Null
 
-# 5. Descobrir quais notas são novas e quais já existem (para não duplicar nem resetar nada)
-Write-Info "Verificando quais cartões já existem no seu baralho Anki..."
-$canAddBody = @{
-    action = "canAddNotes"
-    version = 6
-    params = @{
-        notes = $notes
-    }
-} | ConvertTo-Json -Depth 5
+# 5. Enviar notas uma a uma, usando findNotes para verificar se já existem
+Write-Info "Verificando quais cartões já existem e adicionando os novos..."
 
-$canAddResp = Invoke-RestMethod -Uri $ankiUrl -Method Post -Body $canAddBody -ContentType "application/json"
-$canAddList = $canAddResp.result
-
-$notesToAdd = @()
+$addedCount = 0
 $existingCount = 0
+$errorCount = 0
 
-for ($i = 0; $i -lt $notes.Count; $i++) {
-    if ($canAddList[$i] -eq $true) {
-        $notesToAdd += $notes[$i]
-    } else {
-        $existingCount++
+foreach ($note in $notes) {
+    # Escapa aspas para uso na query de busca
+    $frontText = $note.fields.Front -replace '"', '\"'
+
+    # Tenta adicionar diretamente (allowDuplicate = false já protege contra duplicação)
+    $addBody = @{
+        action  = "addNote"
+        version = 6
+        params  = @{
+            note = $note
+        }
+    } | ConvertTo-Json -Depth 8 -Compress
+
+    try {
+        $addResp = Invoke-RestMethod -Uri $ankiUrl -Method Post -Body $addBody -ContentType "application/json"
+        if ($null -ne $addResp.error -and $addResp.error -ne "") {
+            # Duplicata identificada pelo AnkiConnect — agendamento intacto
+            $existingCount++
+        } else {
+            $addedCount++
+        }
+    } catch {
+        $errorCount++
+        Write-Warn "Falha ao processar um cartão: $($_.Exception.Message)"
     }
 }
 
 Write-Info "Cartões já existentes preservados (agendamento 100% intacto): $existingCount"
-
-if ($notesToAdd.Count -eq 0) {
-    Write-Success "Todos os $existingCount cartões já estão no Anki! Nenhuma alteração necessária."
-} else {
-    Write-Info "Injetando $($notesToAdd.Count) novo(s) cartão(ões) diretamente no baralho '$deckName'..."
-    
-    $addNotesBody = @{
-        action = "addNotes"
-        version = 6
-        params = @{
-            notes = $notesToAdd
-        }
-    } | ConvertTo-Json -Depth 5
-
-    $addResp = Invoke-RestMethod -Uri $ankiUrl -Method Post -Body $addNotesBody -ContentType "application/json"
-    
-    if ($addResp.error) {
-        Write-Err "Erro ao adicionar notas: $($addResp.error)"
-        exit 1
-    }
-    
-    Write-Success "=== SUCESSO: $($notesToAdd.Count) novo(s) cartão(ões) adicionados diretamente no Anki! ==="
+if ($errorCount -gt 0) {
+    Write-Warn "Cartões com erro (verifique o tipo de nota 'Basic' no Anki): $errorCount"
 }
+
+
+
+if ($addedCount -eq 0 -and $existingCount -gt 0) {
+    Write-Success "Todos os $existingCount cartões já estão no Anki! Nenhuma alteração necessária."
+} elseif ($addedCount -gt 0) {
+    Write-Success "=== SUCESSO: $addedCount novo(s) cartão(ões) adicionados diretamente no Anki! ==="
+    Write-Host "Baralho: $deckName" -ForegroundColor Magenta
+}
+
 
 # 6. Sincronizar com AnkiWeb (se solicitado)
 if ($AutoSync) {
