@@ -41,6 +41,10 @@ Termine com uma pergunta simples para confirmar que ficou claro, ou pergunte se 
 
 Quando fizer sentido, indique onde o estudante pode se aprofundar dentro da DIO (um Curso, uma Formação ou um Desafio relacionado).
 
+### 8. Sugira a inclusão no Glossário
+
+Se o conceito for novo ou ainda não constar em `docs/glossary.md`, destaque o termo ao final da resposta com uma proposta de definição e analogia no formato do glossário, e pergunte se o estudante quer adicioná-lo ao arquivo.
+
 ## Lembre-se
 
 - Comece simples. É sempre possível aprofundar depois, se o estudante pedir.
